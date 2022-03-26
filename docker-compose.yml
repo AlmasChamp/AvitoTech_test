@@ -2,14 +2,14 @@ version: '3.1'
 
 services:
 
-  server:
-    build: .
-    ports:
-    - "9000:8080"
-    depends_on:
-    - db
-    networks:
-    - default
+  # server:
+  #   build: .
+  #   ports:
+  #   - "9000:8080"
+  #   depends_on:
+  #   - db
+  #   networks:
+  #   - default
   
 
   db:
@@ -19,5 +19,5 @@ services:
       POSTGRES_PASSWORD: 12345
     ports:
     - "5432:5432"
-    networks:
-    - default
+    # networks:
+    # - default

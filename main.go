@@ -1,7 +1,8 @@
 package main
 
 import (
-	"avito/adapters"
+	"avito/internal/app"
+	"avito/internal/repository"
 	"database/sql"
 	"fmt"
 	"log"
@@ -12,21 +13,29 @@ import (
 
 func main() {
 
-	DataBase := adapters.InitDb()
+	db := repository.InitDb()
 
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
 			log.Fatalf("close database: %v\n", err)
 		}
-	}(DataBase.Db)
+	}(db)
+
+	if err := repository.CreateTables(db); err != nil {
+		log.Fatal(err)
+		return
+	}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", DataBase.AddUser)
-	mux.HandleFunc("/balanceUser", DataBase.Balance)
-	mux.HandleFunc("/balanceUp", DataBase.BalanceIncrease)
-	mux.HandleFunc("/balanceDown", DataBase.BalanceDecrease)
-	mux.HandleFunc("/balanceTransfer", DataBase.BalanceTransfer)
+
+	userComposite, err := app.Composites(db)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	userComposite.Handler.Register(mux)
+
 	fmt.Println("Start on port 9000")
 	log.Fatal(http.ListenAndServe(":8080", mux))
 }

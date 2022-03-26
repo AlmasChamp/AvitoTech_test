@@ -1,16 +1,16 @@
-package adapters
+package repository
 
 import (
-	"avito/service"
 	"database/sql"
 	"fmt"
 	"log"
 )
 
-func InitDb() *service.DataBase {
+func InitDb() *sql.DB {
 
 	const (
-		host     = "db"
+		host = "localhost"
+		// host     = "db"
 		port     = "5432"
 		user     = "postgres"
 		password = "12345"
@@ -33,23 +33,5 @@ func InitDb() *service.DataBase {
 	}
 	log.Println("Successfully connected!")
 
-	_, err = db.Exec(`
-	CREATE TABLE IF NOT EXISTS users (
-		id SERIAL PRIMARY KEY,        
-		email VARCHAR NOT NULL,       
-		password VARCHAR NOT NULL,
-		uuid VARCHAR NOT NULL,
-		balance DECIMAL DEFAULT 0
-	  );
-	`)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	log.Println("Table Successfully Create!")
-
-	return &service.DataBase{
-		Db: db,
-	}
+	return db
 }

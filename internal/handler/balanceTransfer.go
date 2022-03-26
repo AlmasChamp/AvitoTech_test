@@ -1,4 +1,4 @@
-package service
+package handler
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func (d *DataBase) BalanceDecrease(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) BalanceTransfer(w http.ResponseWriter, r *http.Request) {
 
 	user := &User{}
 
@@ -24,6 +24,9 @@ func (d *DataBase) BalanceDecrease(w http.ResponseWriter, r *http.Request) {
 
 		rateBalance := url.Get("balance")
 		balance, _ := strconv.ParseFloat(rateBalance, 64)
+
+		rateToId := url.Get("toid")
+		id2, _ := strconv.Atoi(rateToId)
 
 		ctx := context.Background()
 		ctx, _ = context.WithTimeout(ctx, time.Second*5)
@@ -39,14 +42,20 @@ func (d *DataBase) BalanceDecrease(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		row := tx.QueryRow("SELECT balance FROM users WHERE id= $1", id)
+		row := tx.QueryRow("SELECT balance FROM users WHERE id= $1", user.Id)
 		var balanceCheck float64
 
 		err = row.Scan(&balanceCheck)
-
+		fmt.Println("****************InCheck", balance, "****************************")
 		if err != nil || balanceCheck < 0 {
-			w.WriteHeader(400)
 			w.Write([]byte("insufficient funds"))
+			w.WriteHeader(400)
+			tx.Rollback()
+			return
+		}
+
+		_, err = tx.ExecContext(ctx, "UPDATE users SET balance = balance + $1 WHERE id = $2", balance, id2)
+		if err != nil {
 			tx.Rollback()
 			return
 		}
@@ -69,7 +78,7 @@ func (d *DataBase) BalanceDecrease(w http.ResponseWriter, r *http.Request) {
 			log.Println("JSON data isn't correct")
 		}
 
-		fmt.Println("*******************BalanceDecrease", user.Id, user.Balance, "****************")
+		fmt.Println("*******************BalanceTRANSFER", user.Id, user.ReciverId, user.Balance, "****************")
 
 		ctx := context.Background()
 		ctx, _ = context.WithTimeout(ctx, time.Second*5)
@@ -89,10 +98,16 @@ func (d *DataBase) BalanceDecrease(w http.ResponseWriter, r *http.Request) {
 		var balance float64
 
 		err = row.Scan(&balance)
-
+		fmt.Println("****************InCheck", balance, "****************************")
 		if err != nil || balance < 0 {
-			w.WriteHeader(400)
 			w.Write([]byte("insufficient funds"))
+			w.WriteHeader(400)
+			tx.Rollback()
+			return
+		}
+
+		_, err = tx.ExecContext(ctx, "UPDATE users SET balance = balance + $1 WHERE id = $2", user.Balance, user.ReciverId)
+		if err != nil {
 			tx.Rollback()
 			return
 		}
@@ -103,8 +118,8 @@ func (d *DataBase) BalanceDecrease(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		balanceOut := strconv.Itoa(int(balance))
-		w.Write([]byte(balanceOut + "p"))
+		balanceOut := strconv.Itoa(int(user.Balance))
+		w.Write([]byte("Transfer" + " " + balanceOut + "p"))
 		return
 	}
 

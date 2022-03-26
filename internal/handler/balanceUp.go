@@ -1,4 +1,4 @@
-package service
+package handler
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-func (d *DataBase) BalanceIncrease(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) BalanceIncrease(w http.ResponseWriter, r *http.Request) {
 
 	user := &User{}
 
