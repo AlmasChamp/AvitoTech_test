@@ -45,8 +45,8 @@ func (h *Handler) RegUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("~~~~~~~~~Regpage~~~~~~~~~~~~~~~", user.Email, user.Password, user.Uuid, "~~~~~~~~~~~~~After~~~~~~~~~~~")
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	flag := "reg"
-	jsonResp, err := h.Service.CreateUser(flag, user)
+	action := "reg"
+	jsonResp, err := h.Service.CreateUser(action, user)
 
 	// if err = service.CreateUser(d.Db, user); err != nil {
 	// 	log.Println(err)

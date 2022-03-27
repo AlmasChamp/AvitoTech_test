@@ -13,7 +13,7 @@ type UserComposites struct {
 	Handler repository.Handler
 }
 
-func Composites(db *sql.DB) (*UserComposites, error) {
+func Composite(db *sql.DB) (*UserComposites, error) {
 	// Init Storage
 	repository := repository.NewRepository(db)
 	// Init Service

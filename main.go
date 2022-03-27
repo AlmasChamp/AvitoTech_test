@@ -29,7 +29,7 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	userComposite, err := app.Composites(db)
+	userComposite, err := app.Composite(db)
 	if err != nil {
 		log.Println(err)
 		return

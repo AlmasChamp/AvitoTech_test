@@ -10,7 +10,7 @@ package model
 
 type User struct {
 	Id        int     `json:"id"`
-	ReciverId int     `json:"id2"`
+	ReciverId int     `json:"reciver"`
 	Email     string  `json:"email"`
 	Password  string  `json:"password"`
 	Uuid      string  `json:"uuid"`

@@ -14,13 +14,14 @@ func PrepareJson(flag string, resp map[string]string, user *model.User) ([]byte,
 		resp["Id"] = strconv.Itoa(user.Id)
 		resp["Email"] = user.Email
 		resp["Password"] = user.Password
-	} else if flag == "balance" {
+	} else if flag == "up" || flag == "balance" || flag == "down" {
 		balance := fmt.Sprint(user.Balance)
 		resp["Id"] = strconv.Itoa(user.Id)
 		resp["Balance"] = balance
 	}
 
 	jsonResp, err := json.Marshal(resp)
+	
 	if err != nil {
 		log.Fatalf("Error happened in JSON marshal. Err: %s", err)
 		return jsonResp, err
