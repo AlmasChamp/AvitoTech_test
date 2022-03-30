@@ -3,7 +3,6 @@ package handler
 import (
 	"avito/internal/model"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -23,8 +22,6 @@ func (h *Handler) RegUser(w http.ResponseWriter, r *http.Request) {
 		Uuid: uuid.NewV1().String(),
 	}
 
-	fmt.Println("#######Regpage##########", user.Email, user.Password, "###########Before###########")
-
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(400)
@@ -42,36 +39,16 @@ func (h *Handler) RegUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("~~~~~~~~~Regpage~~~~~~~~~~~~~~~", user.Email, user.Password, user.Uuid, "~~~~~~~~~~~~~After~~~~~~~~~~~")
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 	action := "reg"
 	jsonResp, err := h.Service.CreateUser(action, user)
-
-	// if err = service.CreateUser(d.Db, user); err != nil {
-	// 	log.Println(err)
-	// 	w.WriteHeader(500)
-	// 	return
-	// }
 
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	// resp := make(map[string]string)
-	// flag := "reg"
-
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
-
-	// jsonResp, err := PrepareJson(flag, resp, user)
-	// if err != nil {
-	// 	log.Println(err)
-	// 	w.WriteHeader(500)
-	// 	w.Write([]byte("Server Error "))
-	// 	return
-	// }
 
 	w.Write(jsonResp)
 	return

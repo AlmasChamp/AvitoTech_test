@@ -5,13 +5,13 @@ import (
 )
 
 func (s *Service) CreateUser(action string, user *model.User) ([]byte, error) {
-	// if err := CanRegister(user); err != nil {
-	// 	return err
-	// }
+
 	resp := make(map[string]string)
 
 	err := s.Storage.AddUser(user)
-	return nil, err
+	if err != nil {
+		return nil, err
+	}
 
 	jsonResp, err := PrepareJson(action, resp, user)
 	if err != nil {

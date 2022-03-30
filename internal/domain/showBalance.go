@@ -5,11 +5,11 @@ import (
 	"log"
 )
 
-func (s *Service) ShowBalance(action string, user *model.User, id int) ([]byte, error) {
+func (s *Service) ShowBalance(action string, user *model.User) ([]byte, error) {
 
 	resp := make(map[string]string)
 
-	if err := s.Storage.MyBalance(user, id); err != nil {
+	if err := s.Storage.MyBalance(user); err != nil {
 		return nil, err
 	}
 

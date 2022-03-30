@@ -5,9 +5,9 @@ import (
 	"fmt"
 )
 
-func (r *Repository) MyBalance(user *model.User, id int) error {
+func (r *Repository) MyBalance(user *model.User) error {
 
-	row := r.db.QueryRow("SELECT id FROM users WHERE id= $1", id)
+	row := r.db.QueryRow("SELECT id FROM users WHERE id= $1", user.Id)
 
 	err := row.Scan(&user.Id)
 	fmt.Println(user.Id, "^^^^^^^^^^^^^^")
@@ -15,7 +15,7 @@ func (r *Repository) MyBalance(user *model.User, id int) error {
 		return err
 	}
 
-	row = r.db.QueryRow("SELECT balance FROM users WHERE id= $1", id)
+	row = r.db.QueryRow("SELECT balance FROM users WHERE id= $1", user.Id)
 
 	err = row.Scan(&user.Balance)
 	fmt.Println(user.Balance, "^^^^^^^^^^^^^^")

@@ -21,7 +21,7 @@ func PrepareJson(flag string, resp map[string]string, user *model.User) ([]byte,
 	}
 
 	jsonResp, err := json.Marshal(resp)
-	
+
 	if err != nil {
 		log.Fatalf("Error happened in JSON marshal. Err: %s", err)
 		return jsonResp, err

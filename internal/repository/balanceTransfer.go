@@ -10,7 +10,7 @@ import (
 
 func (r *Repository) BalanceTransfer(user *model.User) error {
 
-	// var chechBalance float64
+	var checkBalance float64
 	var checkUuid string
 
 	ctx := context.Background()
@@ -33,7 +33,7 @@ func (r *Repository) BalanceTransfer(user *model.User) error {
 
 	row = tx.QueryRow("SELECT balance FROM users WHERE id= $1", user.Id)
 
-	err = row.Scan(&user.Balance)
+	err = row.Scan(&checkBalance)
 	fmt.Println("****************InCheck", user.Balance, "****************************")
 	if err != nil || user.Balance < 0 {
 		tx.Rollback()

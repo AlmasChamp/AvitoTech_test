@@ -7,7 +7,8 @@ import (
 	"time"
 )
 
-func (r *Repository) DeductBalance(user *model.User, id int) error {
+func (r *Repository) DeductBalance(user *model.User) error {
+
 	ctx := context.Background()
 	ctx, _ = context.WithTimeout(ctx, time.Second*5)
 
@@ -16,7 +17,7 @@ func (r *Repository) DeductBalance(user *model.User, id int) error {
 		log.Fatal(err)
 	}
 
-	row := tx.QueryRow("SELECT uuid FROM users WHERE id= $1", id)
+	row := tx.QueryRow("SELECT uuid FROM users WHERE id= $1", user.Id)
 
 	err = row.Scan(&user.Uuid)
 

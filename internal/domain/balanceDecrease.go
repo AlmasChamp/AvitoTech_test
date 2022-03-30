@@ -5,10 +5,10 @@ import (
 	"log"
 )
 
-func (s *Service) BalanceDecrs(action string, user *model.User, id int) ([]byte, error) {
+func (s *Service) BalanceDecrs(action string, user *model.User) ([]byte, error) {
 	resp := make(map[string]string)
 
-	if err := s.Storage.DeductBalance(user, user.Id); err != nil {
+	if err := s.Storage.DeductBalance(user); err != nil {
 		return nil, err
 	}
 

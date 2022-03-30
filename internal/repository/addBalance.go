@@ -3,23 +3,12 @@ package repository
 import (
 	"avito/internal/model"
 	"context"
-	"fmt"
 	"log"
 	"time"
 )
 
 func (r *Repository) AddBalance(user *model.User) error {
 
-	// _, err := r.db.Exec(`UPDATE users
-	// SET balance = $1+balance
-	// WHERE id = $2;`, user.Balance, user.Id)
-
-	// if err != nil {
-
-	// 	return err
-	// }
-	// return nil
-	fmt.Println("~~~~~~~~~~~~~~~~~~~~~~~~AddBalance", user.Id, user.Balance, "~~~~~~~~~~~~~~~~~~~~~~~~")
 	ctx := context.Background()
 	ctx, _ = context.WithTimeout(ctx, time.Second*5)
 
